@@ -1,65 +1,56 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://unistyl.es/), etc.
- */
+import type { CarStatus, Level } from '../types/Fault.type';
 
-import '@/global.css';
+export type ThemeName = 'dark' | 'light';
 
-import { Platform } from 'react-native';
+export interface Theme {
+  name: ThemeName;
+  bg: string;
+  primary: string;
+  dim: string;
+  value: string;
+  warn: string;
+  crit: string;
+  onFill: string;
+  bot: string;
+  bolt: string;
+  scanline: string;
+  font: string;
+}
 
-export const Colors = {
-  light: {
-    text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
-  },
-  dark: {
-    text: '#ffffff',
-    background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
-  },
-} as const;
+export const FONT = 'DotGothic16';
 
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
+export const darkTheme: Theme = {
+  name: 'dark',
+  bg: '#000000',
+  primary: '#00E5FF',
+  dim: '#0B6E7A',
+  value: '#5CF2FF',
+  warn: '#FFD60A',
+  crit: '#FF2E4D',
+  onFill: '#000000',
+  bot: '#01FE6F', 
+  bolt: '#FF2E4D',
+  scanline: 'rgba(0,229,255,0.05)',
+  font: FONT,
+};
 
-export const Fonts = Platform.select({
-  ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
-  },
-  default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
-  },
-  web: {
-    sans: 'var(--font-display)',
-    serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
-    mono: 'var(--font-mono)',
-  },
-});
+export const lightTheme: Theme = {
+  name: 'light',
+  bg: '#FFFFFF',
+  primary: '#0B5D3B',
+  dim: '#7FA593',
+  value: '#9A7400',
+  warn: '#F08C00',
+  crit: '#C1121F',
+  onFill: '#FFFFFF',
+  bot: '#078A43', // тот же зелёный, но читаемый на белом
+  bolt: '#D00000',
+  scanline: 'rgba(11,93,59,0.04)',
+  font: FONT,
+};
 
-export const Spacing = {
-  half: 2,
-  one: 4,
-  two: 8,
-  three: 16,
-  four: 24,
-  five: 32,
-  six: 64,
-} as const;
+export const levelColor = (t: Theme, level: Level, base: 'primary' | 'value' = 'primary') =>
+  level === 'crit' ? t.crit : level === 'warn' ? t.warn : t[base];
 
-export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
-export const MaxContentWidth = 800;
+export const statusColor = (t: Theme, s: CarStatus) =>
+  s === 'Critical' ? t.crit : s === 'Warning' ? t.warn : t.primary;
